@@ -1,0 +1,1264 @@
+/* --- СБРОС СТИЛЕЙ И БАЗА --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0a1f0a; /* Темный фон страницы */
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- ОБНОВЛЕННЫЙ HEADER --- */
+.main-header {
+    width: 100%;
+    background: #0d2b0d; /* Темно-зеленый фон шапки */
+    border-bottom: 2px solid #2ecc71; /* Светло-зеленая линия снизу */
+    position: relative;  /* Важно для корректного отображения слоев */
+    z-index: 999;        /* Поднимает шапку над всем остальным контентом сайта */
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 15px 50px;
+    gap: 20px;
+    width: 100%;
+}
+
+.logo {
+    color: #2ecc71;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* Навигация с облачками категорий */
+.nav-menu {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    flex: 1;                  /* Занимает всё доступное место между Лого и Входом */
+    overflow-x: auto;         /* Включает горизонтальный скролл, если карточек много */
+    white-space: nowrap;      /* Запрещает карточкам переноситься на новую строку */
+    scrollbar-width: none;    /* Прячет скроллбар в Firefox */
+    padding: 5px 0;           /* Небольшой отступ, чтобы тени ховера не обрезались */
+}
+
+/* Прячем скроллбар для Chrome, Safari и Edge */
+.nav-menu::-webkit-scrollbar {
+    display: none;
+}
+
+/* --- СТИЛЬНЫЕ КАРТОЧКИ-ОБЛАЧКА КАТЕГОРИЙ --- */
+.menu-card {
+    display: flex;
+    align-items: center;
+    background: rgba(46, 204, 113, 0.1); /* Полупрозрачный темно-зеленый фон */
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(46, 204, 113, 0.3); /* Тонкая аккуратная рамка */
+    text-decoration: none;
+    min-width: max-content;
+    transition: all 0.3s ease;
+}
+
+/* Эффект при наведении на категорию */
+.menu-card:hover {
+    background: #15a33b;
+    border-color: #15a33b;
+    transform: translateY(-2px); /* Легкий подъем вверх */
+    box-shadow: 0 5px 15px rgba(21, 163, 59, 0.3);
+}
+
+.menu-card:hover .m-title,
+.menu-card:hover .m-subtitle {
+    color: #ffffff;
+}
+
+/* Иконки внутри категорий */
+.menu-card-icon img {
+    width: 22px;
+    height: auto;
+    margin-right: 12px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Текст в облачках */
+.menu-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.m-title {
+    color: #2ecc71;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+.m-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+/* --- КНОПКИ АВТОРИЗАЦИИ (ВХОД / РЕГИСТРАЦИЯ) --- */
+.btn-login, .btn-reg {
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+/* Кнопка "Вход" — контурная */
+.btn-login {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-login:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+}
+
+/* Кнопка "Регистрация" — акцентная */
+.btn-reg {
+    background: #15a33b;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(21, 163, 59, 0.2);
+}
+
+.btn-reg:hover {
+    background: #128a32;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(21, 163, 59, 0.4);
+}
+
+.auth-section {
+    margin-left: auto;        /* Прижимает блок к правому краю */
+    flex-shrink: 0;           /* Запрещает кнопкам авторизации сжиматься */
+    display: flex;
+    align-items: center;
+}
+
+.auth-btns {
+    display: flex;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+/* --- ЧИСТЫЙ CSS ПРОФИЛЬ С ВЫПАДАЮЩИМ МЕНЮ --- */
+.user-profile-container {
+    position: relative;
+}
+
+/* Полностью прячем сам чекбокс с экрана */
+.profile-toggle-checkbox {
+    display: none;
+}
+
+/* Кнопка-триггер (работает по клику благодаря связи с label) */
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(46, 204, 113, 0.25);
+    padding: 5px 5px 5px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.profile-trigger:hover {
+    background: rgba(46, 204, 113, 0.08);
+    border-color: #2ecc71;
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.15);
+}
+
+.user-money-header {
+    color: #2ecc71;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.user-avatar-header {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, #2ecc71, #15a33b);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0d2b0d;
+    font-weight: 800;
+    font-size: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ВЫПАДАЮЩЕЕ МЕНЮ ПРОФИЛЯ */
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 260px;
+    background: #111a11; /* Премиальный глубокий графитовый тон */
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    padding: 16px;
+    z-index: 1000;
+
+    /* Изначальное скрытое состояние для анимации выезда */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-12px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ГЛАВНАЯ ФИШКА: Если скрытый чекбокс нажат — плавно показываем дропдаун */
+.profile-toggle-checkbox:checked ~ .profile-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Акцентная подсветка кнопки в шапке, пока меню открыто */
+.profile-toggle-checkbox:checked ~ .profile-trigger {
+    background: rgba(46, 204, 113, 0.12);
+    border-color: #2ecc71;
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);
+}
+
+/* Шапка внутри выпадающего окна (Аватарка + Ник) */
+.dropdown-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 2px;
+}
+
+.dropdown-avatar {
+    width: 42px;
+    height: 42px;
+    background: rgba(46, 204, 113, 0.15);
+    border: 1px solid #2ecc71;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2ecc71;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.dropdown-user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-username {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.dropdown-status {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 11px;
+}
+
+/* Тонкий аккуратный разделитель */
+.dropdown-divider {
+    height: 1px;
+    background: rgba(46, 204, 113, 0.2);
+    margin: 12px 0;
+}
+
+/* Список внутренних ссылок */
+.dropdown-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    color: #d1d1d1;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-link:hover {
+    background: rgba(46, 204, 113, 0.12);
+    color: #2ecc71;
+    transform: translateX(3px); /* Эффект легкого сдвига вправо при ховере */
+}
+
+.dropdown-link strong {
+    color: #2ecc71;
+    font-weight: 800;
+}
+
+.link-icon {
+    font-size: 15px;
+}
+
+/* Кнопка "Выйти из аккаунта" */
+.dropdown-btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    color: #ff4757;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-btn-logout:hover {
+    background: rgba(255, 71, 87, 0.1);
+    color: #ff6b81;
+    transform: translateX(3px);
+}
+
+/* --- ЦЕНТРАЛЬНЫЙ КОНТЕНТ (СВЕТЛЫЙ СТИЛЬ) --- */
+main {
+    flex: 1;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #e8f5e9;
+    color: #1a3a1a;
+    position: relative; /* Важно для корректного наложения слоев */
+    z-index: 1;         /* Контент строго под выпадающей шапкой */
+}
+
+.hero {
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+    padding: 60px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+/* --- СЕТКА ТОВАРОВ --- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+/* --- КАРТОЧКА ТОВАРА --- */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.product-image {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.1) rotate(1deg);
+    filter: brightness(0.8);
+}
+
+/* --- БЕЙДЖИ НА КАРТИНКАХ --- */
+.badge-game, .badge-skin, .badge-sub, .badge-gift, .badge-other, .badge-top {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    pointer-events: none;
+}
+
+.badge-game { background: linear-gradient(135deg, #3498db, #2980b9); }
+.badge-skin { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+.badge-sub  { background: linear-gradient(135deg, #1abc9c, #16a085); }
+.badge-gift { background: linear-gradient(135deg, #e67e22, #d35400); }
+.badge-other, .badge-top {
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- ИНФО О ТОВАРЕ --- */
+.product-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 20px;
+    font-weight: 800;
+    color: #15a33b;
+    margin-top: auto;
+}
+
+/* --- КНОПКИ ДЕЙСТВИЯ (КУПИТЬ / СЧЕТЧИК) --- */
+.buy-button {
+    width: 100%;
+    height: 55px;
+    background: #15a33b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border-radius: 0 0 16px 16px;
+}
+
+.buy-button:hover {
+    background: #128a32;
+    gap: 15px;
+}
+
+.buy-button:active {
+    transform: scale(0.95);
+}
+
+.buy-button.in-cart {
+    background: #0d2b0d !important;
+    color: #2ecc71 !important;
+    border: 1px solid #2ecc71;
+    cursor: default;
+}
+
+.buy-button.in-cart:hover {
+    background: #0d2b0d !important;
+    gap: 10px;
+    transform: none;
+}
+
+/* Счетчик элементов (Стиль Озон) */
+.ozon-counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 55px;
+    background: #f0f2f5;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    border: 1px solid #15a33b;
+}
+
+.counter-btn {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #15a33b;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.counter-btn:hover {
+    background: #e8f5e9;
+}
+
+.counter-value {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    color: #1a3a1a;
+    font-size: 18px;
+}
+
+/* --- СТРАНИЦА РЕГИСТРАЦИИ ФОРМЫ --- */
+.reg-page {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    background: #e8f5e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reg-container {
+    background: #e8f5e9;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid #2ecc71;
+    box-shadow: 0 10px 25px rgba(46, 204, 113, 0.2);
+    text-align: center;
+}
+
+.reg-title {
+    color: #15a33b;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.reg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.reg-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.reg-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a3a1a;
+    margin-bottom: 8px;
+}
+
+.reg-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #2ecc71;
+    border-radius: 10px;
+    background: #ffffff;
+    font-size: 16px;
+    color: #1a3a1a;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.reg-input:focus {
+    border-color: #15a33b;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.3);
+    transform: scale(1.01);
+}
+
+.reg-btn {
+    width: 100%;
+    padding: 15px;
+    background: #15a33b;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.reg-btn:hover {
+    background: #128a32;
+    box-shadow: 0 5px 15px rgba(21, 163, 59, 0.4);
+    transform: translateY(-2px);
+}
+
+/* --- ПЛАВАЮЩАЯ КОРЗИНА --- */
+.floating-cart {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-cart:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 12px 30px rgba(40, 167, 69, 0.4);
+}
+
+.cart-icon {
+    font-size: 30px;
+}
+
+.cart-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ff4757;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #1a1a1a;
+}
+
+/* --- СЧЕТЧИК ВНУТРИ КОРЗИНЫ --- */
+.cart-ozon-counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1a1a1a;
+    border: 1px solid #28a745;
+    border-radius: 8px;
+    width: 110px;
+    height: 40px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.cart-counter-btn {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #28a745;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.cart-counter-btn:hover {
+    background: rgba(40, 167, 69, 0.1);
+}
+
+.cart-counter-value {
+    flex: 1;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+/* --- FOOTER --- */
+footer {
+    background: #0d2b0d;
+    border-top: 2px solid #2ecc71;
+    padding: 40px 20px;
+    margin-top: auto;
+}
+/* --- КНОПКА ИЗБРАННОГО НА КАРТОЧКЕ --- */
+.favorite-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+/* Эффект при наведении на сердечко */
+.favorite-btn:hover {
+    background: rgba(255, 71, 87, 0.9); /* Красный цвет */
+    color: #ffffff;
+    border-color: #ff4757;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(255, 71, 87, 0.4);
+}
+
+/* Класс-маркер для уже добавленного в избранное (если карточка "активна") */
+.favorite-btn.active {
+    background: #ff4757;
+    color: #ffffff;
+    border-color: #ff4757;
+}
+/* --- СМЕНА АВАТАРКИ ПРИ НАВЕДЕНИИ --- */
+.avatar-hover-zone {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+}
+
+/* Стили для самой картинки внутри круга */
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Затемняющий оверлей с фотоаппаратом */
+.avatar-mini-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    border-radius: 50%;
+}
+
+/* Эффект при наведении */
+.avatar-hover-zone:hover .avatar-mini-overlay {
+    opacity: 1;
+}
+
+.avatar-hover-zone:hover {
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.6); /* Зеленая неоновая подсветка */
+    transform: scale(1.03);
+}
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ НАСТРОЕК --- */
+.settings-main {
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.settings-container {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.settings-container h2 {
+    margin-top: 0;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.settings-section {
+    background: #222;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.settings-section h3 {
+    margin-top: 0;
+    color: #2ecc71; /* Зеленый акцент под стиль сайта */
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    background: #111;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #2ecc71;
+    outline: none;
+}
+
+.settings-btn {
+    background: #2ecc71;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+}
+
+.settings-btn:hover {
+    background: #27ae60;
+}
+
+.settings-btn.btn-danger {
+    background: #e74c3c;
+}
+
+.settings-btn.btn-danger:hover {
+    background: #c0392b;
+}
+
+/* Стили уведомлений об ошибке / успехе */
+.alert-error, .alert-success {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.alert-error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+.alert-success { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+
+/* ==========================================================================
+   БЛОК МОМЕНТАЛЬНОЙ ПОКУПКИ (БЕЗ JS) + НОВЫЕ КАРТИНКИ
+   ========================================================================== */
+
+.instant-buy-container {
+    background: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 30px auto;
+    max-width: 1200px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.instant-buy-title {
+    font-size: 1.4rem;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge-secure, .badge-official {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.badge-secure {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.badge-official {
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.2);
+}
+
+/* Сетка карточек-ссылок */
+.instant-games-grid {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+/* Избавляемся от полосы прокрутки, но сохраняем скролл */
+.instant-games-grid::-webkit-scrollbar {
+    height: 6px;
+}
+.instant-games-grid::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 4px;
+}
+
+.instant-game-card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 110px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+/* Контейнер для иконки категории (НОВОЕ) */
+.game-avatar-container {
+    width: 64px;
+    height: 64px;
+    background: #222224;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 1px solid #333;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* Сама картинка внутри карточки (НОВОЕ) */
+.category-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
+}
+
+.instant-game-card span {
+    font-size: 0.85rem;
+    color: #888;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Ховер и Активное состояние */
+.instant-game-card:hover {
+    background: #222;
+    border-color: #444;
+    transform: translateY(-2px);
+}
+
+/* Эффект при наведении на контейнер картинки */
+.instant-game-card:hover .game-avatar-container {
+    transform: translateY(-2px);
+    border-color: #555;
+}
+
+.instant-game-card:hover .category-icon {
+    transform: scale(1.1);
+}
+
+/* Активная карточка */
+.instant-game-card.active {
+    background: #1e1e1e;
+    border-color: #00ff66; /* Неоново-зеленый под стиль скрина */
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.15);
+}
+
+.instant-game-card.active span {
+    color: #00ff66;
+    font-weight: 600;
+}
+
+/* Стили для картинки в АКТИВНОЙ (выбранной) категории (НОВОЕ) */
+.instant-game-card.active .game-avatar-container {
+    background: #00ff66;
+    border-color: #00ff66;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+}
+
+.instant-game-card.active .category-icon {
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.2)) brightness(1.05);
+}
+
+/* Контейнер якоря, чтобы не ломать отступы */
+#instant-zone {
+    margin-bottom: 10px;
+}
+
+/* Строка формы покупки */
+.instant-buy-form {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #15191e;
+    padding: 12px;
+    border-radius: 16px;
+}
+
+.instant-input-wrapper {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    flex: 2;
+    min-width: 200px;
+    transition: border-color 0.2s;
+}
+
+.instant-input-wrapper:focus-within {
+    border-color: #00ff66;
+}
+
+.instant-input-wrapper input,
+.instant-input-wrapper select {
+    background: transparent;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-size: 1rem;
+    outline: none;
+    font-family: inherit;
+}
+
+/* Стилизация выпадающего списка */
+.instant-input-wrapper select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 30px;
+}
+
+.instant-input-wrapper select option {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 10px;
+}
+
+/* Делаем поле промокода чуть компактнее */
+.instant-input-wrapper.promo-field {
+    flex: 1.2;
+    min-width: 150px;
+}
+
+/* Кнопка мгновенной оплаты */
+.instant-submit-btn {
+    background: #00ff66;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    min-width: 200px;
+    font-family: inherit;
+    text-transform: none;
+}
+
+.instant-submit-btn:hover {
+    background: #00e65c;
+    box-shadow: 0 4px 20px rgba(0, 255, 102, 0.3);
+}
+
+.instant-submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* ==========================================================================
+   ПЛАВНЫЕ ТОАСТ-УВЕДОМЛЕНИЯ В УГЛУ ЭКРАНА
+   ========================================================================== */
+
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px; /* Прижали к правому нижнему углу */
+    z-index: 99999;
+    max-width: 400px;
+    width: 100%;
+}
+
+.toast-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+
+    /* Эффект плавного выезда справа налево */
+    animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.toast-card.success { border-left: 4px solid #2ecc71; }
+.toast-card.error { border-left: 4px solid #e74c3c; }
+
+.toast-icon {
+    font-size: 1.5rem;
+}
+
+.toast-content h4 {
+    margin: 0 0 4px 0;
+    color: #111111;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.toast-content p {
+    margin: 0;
+    color: #666666;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.toast-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #bbb;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.toast-close:hover { color: #333; }
+
+/* Динамическая полоса времени внизу плашки (исчезает сама за 6 секунд) */
+.toast-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: #2ecc71;
+    animation: shrinkLine 6s linear forwards;
+}
+.toast-card.error::after { background: #e74c3c; }
+
+/* Плейсхолдер для иконок типов, если в БД нет картинок (оставлен на всякий случай) */
+.game-avatar-placeholder {
+    width: 52px;
+    height: 52px;
+    background: #e0e0e0;
+    color: #555;
+    border-radius: 50%; /* Делаем круглыми */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border: 2px solid #ccc;
+}
+.instant-game-card.active .game-avatar-placeholder {
+    background: #2ecc71;
+    color: #fff;
+    border-color: #2ecc71;
+}
+
+/* КЛЮЧЕВЫЕ АНИМАЦИИ */
+@keyframes slideInToast {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes shrinkLine {
+    from { width: 100%; }
+    to { width: 0%; }
+}

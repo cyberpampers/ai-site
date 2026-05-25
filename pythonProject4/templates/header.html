@@ -1,0 +1,77 @@
+<header class="main-header">
+    <div class="header-container">
+        <a href="{{ url_for('index') }}" class="logo">GameShop</a>
+
+        <nav class="nav-menu">
+            {% include 'categories.html' %}
+        </nav>
+
+        <div class="auth-section">
+            {% if session.user_id %}
+                <div class="user-profile-container">
+
+                    <form id="avatar-form" action="{{ url_for('upload_avatar') }}" method="POST" enctype="multipart/form-data" style="display: none;">
+                        <input type="file" id="avatar-input" name="avatar" accept="image/*" onchange="document.getElementById('avatar-form').submit();">
+                    </form>
+
+                    <input type="checkbox" id="profile-toggle" class="profile-toggle-checkbox">
+
+                    <label for="profile-toggle" class="profile-trigger">
+                        <span class="user-money-header">{{ user_balance }} ₽</span>
+
+                        <div class="user-avatar-header avatar-hover-zone" onclick="event.preventDefault(); document.getElementById('avatar-input').click();" title="Сменить аватарку">
+                            {% if session.user_avatar %}
+                                <img src="{{ url_for('static', filename='uploads/' + session.user_avatar) }}" alt="Avatar" class="avatar-img">
+                            {% else %}
+                                {{ session.user_name[0] | upper }}
+                            {% endif %}
+                            <div class="avatar-mini-overlay">📷</div>
+                        </div>
+                    </label>
+
+                    <div class="profile-dropdown">
+                        <div class="dropdown-header">
+                            <div class="dropdown-avatar avatar-hover-zone" onclick="document.getElementById('avatar-input').click();" title="Сменить аватарку">
+                                {% if session.user_avatar %}
+                                    <img src="{{ url_for('static', filename='uploads/' + session.user_avatar) }}" alt="Avatar" class="avatar-img">
+                                {% else %}
+                                    {{ session.user_name[0] | upper }}
+                                {% endif %}
+                                <div class="avatar-mini-overlay">📷</div>
+                            </div>
+                            <div class="dropdown-user-details">
+                                <span class="dropdown-username">{{ session.user_name }}</span>
+                                <span class="dropdown-status">Игрок GameShop</span>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-menu-links">
+                            <a href="#" class="dropdown-link">
+                                <span class="link-icon">💰</span> Баланс: <strong>{{ user_balance }} ₽</strong>
+                            </a>
+                            <a href="{{ url_for('favorites_page') }}" class="dropdown-link">
+                                <span class="link-icon">❤️</span> Избранное
+                            </a>
+                            <a href="/settings" class="dropdown-link">
+                                <span class="link-icon">⚙️</span> Настройки
+                            </a>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a href="{{ url_for('logout') }}" class="dropdown-btn-logout">
+                            <span class="link-icon">🚪</span> Выйти из аккаунта
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="auth-btns">
+                    <a href="{{ url_for('login') }}" class="btn-login">Вход</a>
+                    <a href="{{ url_for('register') }}" class="btn-reg">Регистрация</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</header>

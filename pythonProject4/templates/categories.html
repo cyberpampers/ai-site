@@ -1,0 +1,36 @@
+<nav class="nav-menu">
+    <a href="/" class="menu-card {% if not current_cat_id %}active{% endif %}">
+        <div class="menu-card-icon">
+            <img src="{{ url_for('static', filename='image/catalog.png') }}" alt="All">
+        </div>
+        <div class="menu-card-text">
+            <span class="m-title">Все товары</span>
+            <span class="m-subtitle">Весь каталог</span>
+        </div>
+    </a>
+
+    {% for cat in categories %}
+    <a href="/category/{{ cat.id }}"
+       class="menu-card {% if cat.id == current_cat_id %}active{% endif %}">
+        <div class="menu-card-icon">
+            {% if "Подарочные карты" in cat.name_product %}
+                <img src="{{ url_for('static', filename='image/gift.png') }}" alt="Gift">
+            {% elif "Игры" in cat.name_product %}
+                <img src="{{ url_for('static', filename='image/key.png') }}" alt="Games">
+            {% elif "Скины и предметы" in cat.name_product %}
+                <img src="{{ url_for('static', filename='image/knife.png') }}" alt="Skins">
+            {% elif "Подписки" in cat.name_product %}
+                <img src="{{ url_for('static', filename='image/galka.png') }}" alt="Subs">
+            {% elif "Пополнение Steam" in cat.name_product %}
+                <img src="{{ url_for('static', filename='image/schet.png') }}" alt="Top-up">
+            {% else %}
+                <img src="{{ url_for('static', filename='image/default.png') }}" alt="Default">
+            {% endif %}
+        </div>
+        <div class="menu-card-text">
+            <span class="m-title">{{ cat.name_product }}</span>
+            <span class="m-subtitle">{{ cat.about_product_category }}</span>
+        </div>
+    </a>
+    {% endfor %}
+</nav>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация | GameShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="reg-page">
+    <div class="reg-container">
+        <h2 class="reg-title">Регистрация</h2>
+
+        <form method="POST" action="/register" class="reg-form">
+            <div class="reg-group">
+                <label class="reg-label">Никнейм:</label>
+                <input type="text" name="nickname" placeholder="Ваш ник" class="reg-input" required>
+            </div>
+
+            <div class="reg-group">
+                <label class="reg-label">Почта:</label>
+                <input type="email" name="mail" placeholder="Введите почту" class="reg-input" required>
+            </div>
+
+            <div class="reg-group">
+                <label class="reg-label">Пароль:</label>
+                <input type="password" name="password" placeholder="Введите пароль" class="reg-input" required>
+            </div>
+
+            <!-- Блок вывода ошибки -->
+            {% if error %}
+                <p style="color: #ff4757; font-size: 0.9em; margin-bottom: 15px; text-align: center; font-weight: bold;">
+                    {{ error }}
+                </p>
+            {% endif %}
+
+            <button type="submit" class="reg-btn">Зарегистрироваться</button>
+        </form>
+
+        <div class="reg-footer" style="margin-top: 20px; text-align: center;">
+            <p style="color: #bbb;">Уже есть аккаунт?
+                <a href="{{ url_for('login') }}" style="color: #28a745; text-decoration: none; font-weight: bold;">Войти</a>
+            </p>
+        </div>
+
+        <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; text-align: center;">
+            <a href="{{ url_for('index') }}" style="color: #888; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <span>←</span> Вернуться на главную
+            </a>
+        </div>
+    </div>
+</body>
+</html>

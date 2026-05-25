@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Корзина | GameShop</title>
+</head>
+<body style="background: #0f0f0f; color: white; padding: 50px; font-family: sans-serif;">
+    <h1 style="color: #28a745;">Ваш заказ</h1>
+
+    {% if products %}
+        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 2px solid #28a745; text-align: left;">
+                    <th style="padding: 15px;">Товар</th>
+                    <th style="text-align: center;">Количество</th>
+                    <th>Цена за шт.</th>
+                    <th>Итого</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in products %}
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 15px;">{{ item.name_product }}</td>
+                    <td style="width: 150px;">
+                        <div class="cart-ozon-counter">
+                            <a href="{{ url_for('remove_one_cart', product_id=item.id) }}" class="cart-counter-btn">−</a>
+                            <span class="cart-counter-value">{{ item.quantity }}</span>
+                            <a href="{{ url_for('add_to_cart_cart', product_id=item.id) }}" class="cart-counter-btn">+</a>
+                        </div>
+                    </td>
+                    <td>{{ item.price }} ₽</td>
+                    <td>{{ item.price * item.quantity }} ₽</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="text-align: right; margin-top: 30px;">
+            <h2 style="font-size: 2em;">Всего: {{ total }} ₽</h2>
+            <br>
+            <a href="/" style="color: #bbb; margin-right: 20px;">Продолжить покупки</a>
+            <a href="/clear_cart" style="color: #ff4757; margin-right: 20px;">Очистить</a>
+            <button style="background: #28a745; color: white; border: none; padding: 15px 40px; font-size: 1.2em; border-radius: 5px; cursor: pointer;">
+                ОПЛАТИТЬ
+            </button>
+        </div>
+    {% else %}
+        <h2>В корзине пока пусто... :(</h2>
+        <a href="/" style="color: #28a745;">Вернуться за покупками</a>
+    {% endif %}
+
+</body>
+</html>

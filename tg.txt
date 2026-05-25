@@ -1,0 +1,134 @@
+vpn://AAAAw3jaJc1BDoMgFEXRrZg_LipqBdyMQcD2RwIE0KRpuvdCOz25L-8NMuBqnA4eXYalgWfOIS1dV7w9bb5SqyyqA27NLz3Mq1aDNuOkmSHznQky9SMlohcb2ZVkM984HQdeJ8q7HR_rZWJC78qSFtQmqYgh_wXKi6xtiD575W01-HwBu0QvnA
+
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    mail VARCHAR(100),
+    password VARCHAR(100),
+    nickname VARCHAR(30),
+    balance NUMERIC(10,2)
+);
+
+
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name_product VARCHAR(50), 
+    about_product_category varchar(100),
+    category VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+select * from categories;
+drop table pro;
+
+CREATE TABLE product (
+    id SERIAL PRIMARY KEY,
+    name_product VARCHAR(50),
+    price INT,
+    type_product VARCHAR(40),
+    about_product TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL 
+);
+
+
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    price NUMERIC(10,2),
+    method_oplati VARCHAR(30),
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE order_items (
+    id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES orders(id) ON DELETE CASCADE,
+    product_id INT REFERENCES product(id) ON DELETE CASCADE,
+    quantity INT,
+    total_price NUMERIC
+);
+
+CREATE TABLE cart (
+    id SERIAL PRIMARY KEY,
+    session_id VARCHAR(400),
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    product_id INT REFERENCES product(id) ON DELETE CASCADE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE favorites (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    UNIQUE(user_id, product_id)
+);
+CREATE TABLE IF NOT EXISTS promocodes (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(50) UNIQUE NOT NULL, 
+    discount_percent INTEGER NOT NULL,
+    is_active INTEGER DEFAULT 1
+);
+INSERT INTO promocodes (code, discount_percent, is_active) 
+VALUES ('kaka', 10, 1);
+
+ALTER TABLE cart ADD COLUMN quantity INTEGER DEFAULT 1;
+
+INSERT INTO users(mail, password, nickname, balance)
+VALUES
+('nikel3322@mail.com', '12345678', 'nikola_tesla', 2342),
+('friday@mail.com', 'millionerAndrey777', 'andruxa_fish', 9900),
+('paul_jackson@mail.com', 'rufus993', 'monkey', 200),
+('user77@mail.com', 'qwerty32', 'kitttycat', 1007);
+ALTER TABLE users 
+ALTER COLUMN password TYPE VARCHAR(255);
+select * from users;
+SELECT * FROM users ORDER BY id DESC;
+INSERT INTO categories (name_product, about_product_category, category) 
+VALUES
+('Игры', 'Лицензионные игры.', 'Игры'),
+('Пополнение Steam', 'Комиссия 99%', 'Пополнение баланса'),
+('Скины и предметы', 'Скины для CS2, Dot', 'Игровые предметы'),
+('Подписки', 'Xbox, PS', 'Подписки и сервисы'),
+('Подарочные карты', 'Подарок для друга', 'Подарочные карты');
+
+
+select * from categories;
+INSERT INTO product (name_product, price, type_product, about_product, category_id) 
+VALUES
+('Steam Wallet 1000₽', 950, 'пополнение', 'Пополнение баланса на 1000 руб.', 2),
+('Elden Ring (Steam)', 2999, 'игра', 'Лицензионный ключ для Steam.', 1),
+('CS2 Butterfly Knife', 14999, 'скин', 'Нож-бабочка (Fade).', 3),
+('Xbox Game Pass 1 мес', 1299, 'подписка', '30 дней подписки.', 4),
+('5000 V-Bucks (Fortnite)', 2599, 'пополнение', 'В-баксы для Fortnite.', 2),
+('Google Play 1000₽', 970, 'пополнение', 'Карта на 1000 рублей.', 5),
+('Valorant - 2000 VP', 1499, 'валюта', '2000 VP.', 2),
+('Roblox 800 Robux', 1099, 'пополнение', '800 Робуксов.', 5),
+('PlayStation 500₽', 490, 'пополнение', 'Карта на 500 рублей.', 5),
+('Hogwarts Legacy (PS5)', 4499, 'игра', 'Цифровая версия.', 1),
+('Dota 2 Arcana - Rubick', 3999, 'скин', 'Аркана на Rubick.', 3),
+('Cyberpunk 2077 (Steam)', 1999, 'игра', 'Фантомная свобода в комплекте.', 1),
+('The Witcher 3: Wild Hunt', 1499, 'игра', 'Полное издание со всеми DLC.', 1),
+('Baldurs Gate 3', 3599, 'игра', 'Игра года 2023.', 1),
+('Red Dead Redemption 2', 2499, 'игра', 'Шедевр от Rockstar.', 1),
+('Call of Duty: Modern Warfare III', 4999, 'игра', 'Онлайн-шутер.', 1),
+('FC 25 (FIFA)', 3999, 'игра', 'Футбольный симулятор.', 1),
+('Minecraft: Java Edition', 1999, 'игра', 'Лицензионный аккаунт.', 1),
+('GTA V Premium Edition', 1499, 'игра', 'GTA Online + карта миллионера.', 1);
+
+DROP TABLE product cascade;
+INSERT INTO orders(user_id, price, method_oplati, status)
+VALUES
+(1, 490, 'card', 'ready'),
+(2, 5230, 'card', 'ready');
+
+INSERT INTO order_items(order_id, product_id, quantity, total_price)
+VALUES
+(1, 10, 1, 490),
+(2, 4, 2, 2598);
+
+INSERT INTO cart(session_id, user_id, product_id)
+VALUES
+('asd123', 1, 1),
+('asdqwe123', 2, 2);
+
+select * from users

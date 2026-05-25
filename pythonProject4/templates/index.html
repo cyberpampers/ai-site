@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>GameShop — Магазин игр</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% include 'header.html' %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="toast-container" id="toast-box">
+        {% for category, message in messages %}
+            <div class="toast-card {{ category }}">
+                <div class="toast-icon">
+                    {% if category == 'success' %}🎉{% else %}⚠️{% endif %}
+                </div>
+                <div class="toast-content">
+                    <h4>{% if category == 'success' %}Успешная операция!{% else %}Произошла ошибка{% endif %}</h4>
+                    <p>{{ message }}</p>
+                </div>
+                <button class="toast-close" onclick="document.getElementById('toast-box').style.display='none'">&times;</button>
+            </div>
+        {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<main>
+    <div class="welcome-banner">
+        <h1>Добро пожаловать в GameShop!</h1>
+        <p>Лучшие цены на games, скины и пополнение баланса</p>
+    </div>
+
+<div class="instant-buy-container">
+        <h2 class="instant-buy-title">⚡ Быстрый заказ по категориям <span class="badge-secure">🔒 Безопасно</span> <span class="badge-official">🛡️ Официально</span></h2>
+
+        <div class="instant-games-grid">
+            {% if db_types %}
+                {% for g_type in db_types %}
+                <a href="/?game={{ g_type }}#instant-zone" class="instant-game-card {% if selected_game == g_type %}active{% endif %}">
+
+<div class="game-avatar-container">
+    {% set t = (g_type | default('') | string | trim | lower) %}
+
+    {% if 'игр' in t or 'game' in t %}
+        <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" alt="Игра" class="category-icon">
+
+    {% elif 'валют' in t or 'coin' in t or 'money' in t %}
+        <img src="https://cdn-icons-png.flaticon.com/512/272/272525.png" alt="Валюта" class="category-icon">
+
+    {% elif 'скин' in t or 'skin' in t or 'одежд' in t %}
+        <img src="https://cdn-icons-png.flaticon.com/512/2917/2917995.png" alt="Скин" class="category-icon">
+
+    {% elif 'подпис' in t or 'sub' in t or 'vip' in t or 'прем' in t %}
+        <img src="https://cdn-icons-png.flaticon.com/512/992/992001.png" alt="Подписка" class="category-icon">
+
+    {% elif 'пополн' in t or 'баланс' in t %}
+        <img src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png" alt="Пополнение" class="category-icon">
+
+    {% else %}
+        <img src="https://cdn-icons-png.flaticon.com/512/4213/4213958.png" alt="Товар" class="category-icon">
+    {% endif %}
+</div>
+
+                    <span>{{ g_type | capitalize }}</span>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666; font-size: 0.9rem; padding: 10px;">Категории быстрого доступа не найдены</p>
+            {% endif %}
+        </div>
+
+        <div id="instant-zone"></div>
+
+            <form action="{{ url_for('instant_checkout') }}" method="POST" class="instant-buy-form">
+    <div class="instant-input-wrapper email-field">
+        <input type="email" name="email" placeholder="Введи свой Email" value="{{ session.get('user_mail', '') }}" required>
+    </div>
+
+    <div class="instant-input-wrapper select-field">
+        <select name="product_id" id="instant-product-select">
+            {% if instant_products %}
+                {% for prod in instant_products %}
+                    <option value="{{ prod.id }}">{{ prod.name_product }} — {{ prod.price }} ₽</option>
+                {% endfor %}
+            {% else %}
+                <option value="">Товары этой категории распроданы</option>
+            {% endif %}
+        </select>
+    </div>
+
+    <div class="instant-input-wrapper promo-field">
+        <input type="text" name="promocode" placeholder="Промокод">
+    </div>
+
+    <button type="submit" class="instant-submit-btn">
+        Оплатить {% if default_price %}{{ default_price }}₽{% else %}0₽{% endif %}
+    </button>
+</form>
+</div>
+    <section id="catalog" class="catalog">
+        <h2>
+            {% if current_cat_id %}
+                {% for cat in categories %}
+                    {% if cat.id == current_cat_id %}{{ cat.name_product }}{% endif %}
+                {% endfor %}
+            {% else %}
+                 Все товары
+            {% endif %}
+        </h2>
+
+        <div class="product-grid">
+
+        {% if products %}
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if product.type_product == 'игра' %}
+                        <span class="badge-game">Игра</span>
+                    {% elif product.type_product == 'скин' or product.type_product == 'аркана' %}
+                        <span class="badge-skin">Скин</span>
+                    {% elif product.type_product == 'подписка' %}
+                        <span class="badge-sub">Подписка</span>
+                    {% elif product.type_product == 'пополнение' or product.type_product == 'валюта' %}
+                        <span class="badge-other">Пополнение</span>
+                    {% else %}
+                        <span class="badge-gift">Товар</span>
+                    {% endif %}
+
+                    {% if session.user_id %}
+                        {% if favorites and product.id in favorites %}
+                            <a href="{{ url_for('add_to_favorites', product_id=product.id) }}#catalog" class="favorite-btn active" title="Убрать из избранного">❤</a>
+                        {% else %}
+                            <a href="{{ url_for('add_to_favorites', product_id=product.id) }}#catalog" class="favorite-btn" title="Добавить в избранное">♡</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="favorite-btn" title="Войдите, чтобы добавить в избранное">♡</a>
+                    {% endif %}
+
+                    {% if 'Elden Ring' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg" alt="Elden Ring">
+                    {% elif 'Cyberpunk' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_600x900.jpg" alt="Cyberpunk 2077">
+                    {% elif 'Witcher' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_600x900.jpg" alt="The Witcher 3">
+                    {% elif 'Baldur' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/library_600x900.jpg" alt="Baldur's Gate 3">
+                    {% elif 'Red Dead Redemption 2' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/library_600x900.jpg" alt="Red Dead Redemption 2">
+                    {% elif 'GTA' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/library_600x900.jpg" alt="GTA V">
+                    {% elif 'Call of Duty' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2000950/library_600x900.jpg" alt="Call of Duty">
+                    {% elif 'FC 25' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2669320/library_600x900.jpg" alt="FC 25">
+                    {% elif 'Hogwarts Legacy' in product.name_product %}
+                        <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/990080/library_600x900.jpg" alt="Hogwarts Legacy">
+                    {% elif 'Xbox' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/xbox.png') }}" alt="Xbox">
+                    {% elif 'Steam' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/steam.png') }}" alt="Steam">
+                    {% elif 'PlayStation' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/ps.png') }}" alt="PlayStation">
+                    {% elif 'Arcana' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/arcana.webp') }}" alt="Arcana">
+                    {% elif 'CS2' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/qwe.png') }}" alt="CS2">
+                    {% elif 'Fortnite' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/vbucks.png') }}" alt="Fortnite">
+                    {% elif 'Roblox' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/roblox.jpg') }}" alt="Roblox">
+                    {% elif 'Valorant' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/valorant.png') }}" alt="Valorant">
+                    {% elif 'Google' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/google.jpg') }}" alt="Google Play">
+                    {% elif 'Minecraft' in product.name_product %}
+                        <img src="{{ url_for('static', filename='image/minecraft.png') }}" alt="Minecraft">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='image/gift.png') }}" alt="Товар">
+                    {% endif %}
+                </div>
+
+                <div class="product-info">
+                    <h3 class="product-title">{{ product.name_product }}</h3>
+                    <p class="description">{{ product.about_product }}</p>
+                    <div class="product-price">{{ product.price }} ₽</div>
+                </div>
+
+                <div class="cart-controls">
+                    {% if session.user_id %}
+                        <a href="{{ url_for('add_to_cart', product_id=product.id) }}#catalog" class="buy-button">
+                            Купить
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="buy-button" style="background: #444; font-size: 0.8em;">
+                            Войти для покупки
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-message">В этой категории пока нет товаров.</p>
+        {% endif %}
+
+        </div>
+    </section>
+</main>
+
+<a href="{{ url_for('cart_page') }}" class="floating-cart">
+    <span style="font-size: 30px;">🛒</span>
+    <span class="cart-badge">{{ cart_count }}</span>
+</a>
+
+{% include 'footer.html' %}
+
+</body>
+</html>
